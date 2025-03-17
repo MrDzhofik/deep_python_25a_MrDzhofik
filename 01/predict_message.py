@@ -25,6 +25,7 @@ def predict_message_mood(
         return "отл"
     return "норм"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     msg = input("Введите сообщение: ")
     print(predict_message_mood(msg))
