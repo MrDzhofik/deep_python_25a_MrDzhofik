@@ -24,6 +24,6 @@ class TestMessageModel(unittest.TestCase):
         ans = predict_message_mood("АА")
         self.assertEqual(ans, "неуд")
 
-    def test_error(self): 
-        with self.assertRaises(TypeError) as err:
-            ans = predict_message_mood(1)
+    def test_error(self):
+        with self.assertRaises(TypeError):
+            predict_message_mood(1)
