@@ -4,7 +4,7 @@ from process import process_json, print_result
 
 def test_success(capsys: CaptureFixture[str]):
     json_str = """{
-    "key1": "Word1 word2", 
+    "key1": "Word1 word2",
     "key2": "word2 word3"
     }"""
     required_keys = ["key1", "KEY2"]
@@ -19,7 +19,7 @@ def test_success(capsys: CaptureFixture[str]):
 
 def test_with_calback(capsys: CaptureFixture[str]):
     json_str = """{
-    "key1": "Word1 word2", 
+    "key1": "Word1 word2",
     "key2": "word2 word3"
     }"""
     required_keys = ["key1", "KEY2"]
@@ -34,7 +34,7 @@ def test_with_calback(capsys: CaptureFixture[str]):
 
 def test_no_tokens(capsys: CaptureFixture[str]):
     json_str = """{
-    "key1": "Word1 word2", 
+    "key1": "Word1 word2",
     "key2": "word2 word3"
     }"""
     required_keys = ["key1", "KEY2"]
