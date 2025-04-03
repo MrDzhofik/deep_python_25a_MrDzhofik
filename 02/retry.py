@@ -5,6 +5,9 @@ def retry_deco(retries=1, expected_exceptions=None):
     if expected_exceptions is None:
         expected_exceptions = []
 
+    catch_exceptions = (RuntimeError, ValueError, TypeError, ZeroDivisionError,
+                        KeyError, IndexError, NameError, SyntaxError)
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -18,7 +21,7 @@ def retry_deco(retries=1, expected_exceptions=None):
                         f' result = {result}'
                     )
                     return result
-                except Exception as e:
+                except catch_exceptions as e:
                     print(
                         f'run "{func.__name__}" with positional args = {args},'
                         f' keyword kwargs = {kwargs}, attempt = {attempt + 1},'
