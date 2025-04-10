@@ -24,6 +24,12 @@ class TestMessageModel(unittest.TestCase):
         ans = predict_message_mood("АА")
         self.assertEqual(ans, "неуд")
 
+    def test_porog(self):
+        ans = predict_message_mood("АА", bad_thresholds=0.2)
+        self.assertEqual(ans, "норм")
+        ans = predict_message_mood("АА", bad_thresholds=0, good_thresholds=0.1)
+        self.assertEqual(ans, "отл")
+
     def test_error(self):
         with self.assertRaises(TypeError):
             predict_message_mood(1)
