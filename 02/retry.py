@@ -5,66 +5,52 @@ def retry_deco(retries=1, expected_exceptions=None):
     if expected_exceptions is None:
         expected_exceptions = []
 
-    catch_exceptions = (RuntimeError, ValueError, TypeError, ZeroDivisionError,
-                        KeyError, IndexError, NameError, SyntaxError)
+    if isinstance(expected_exceptions, (tuple, list)):
+        expected_exceptions = tuple(
+            exc for exc in expected_exceptions
+            if isinstance(exc, type) and issubclass(exc, BaseException)
+        )
 
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             attempt = 0
             while attempt < retries:
+                output = f'run "{func.__name__}" with positional'
+                output += f'args = {args}, keyword kwargs = {kwargs},'
+                output += f'attempt = {attempt + 1},'
                 try:
                     result = func(*args, **kwargs)
-                    print(
-                        f'run "{func.__name__}" with positional args = {args},'
-                        f' keyword kwargs = {kwargs}, attempt = {attempt + 1},'
-                        f' result = {result}'
-                    )
-                    return result
-                except catch_exceptions as e:
-                    print(
-                        f'run "{func.__name__}" with positional args = {args},'
-                        f' keyword kwargs = {kwargs}, attempt = {attempt + 1},'
-                        f' exception = {e.__class__.__name__}'
-                    )
-                    if type(e) in expected_exceptions:
-                        break
+                    output += f' result = {result}'
+                    print(output)
+                except expected_exceptions as e:
+                    output += f' exception = {e.__class__.__name__}'
                     attempt += 1
-            return None
+                    print(output)
+                    break
+                except Exception as e:
+                    output += f' exception = {e.__class__.__name__}'
+                    attempt += 1
+                    print(output)
         return wrapper
     return decorator
 
 
-@retry_deco(3)
 def add(a, b):
     return a + b
 
 
-@retry_deco(3)
 def check_str(value=None):
     if value is None:
         raise ValueError()
     return isinstance(value, str)
 
 
-@retry_deco(2, [ValueError])
 def check_int(value=None):
     if value is None:
         raise ValueError()
     return isinstance(value, int)
 
 
-@retry_deco(1)
 def zero():
     return 1/0
-
-
-# Тесты
-add(4, 2)
-add(4, b=3)
-check_str(value="123")
-check_str(value=1)
-check_str(value=None)
-check_int(value=1)
-check_int(value=None)
-zero()

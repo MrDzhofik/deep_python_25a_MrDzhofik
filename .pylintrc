@@ -4,6 +4,11 @@ disable=
     C0115,
     C0116,
     C0303, # trailing whitespace
+    R0903, # few-public methods
+    E1101, # no member
+    C0117, # unnecessary-negotation
+    E0712,
+    W0718
 
 [FORMAT]
 max-line-length=80

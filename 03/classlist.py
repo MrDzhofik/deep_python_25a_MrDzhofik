@@ -42,13 +42,23 @@ class CustomList(list):
         return NotImplemented
 
     def __eq__(self, other):
-        if isinstance(other, CustomList):
-            return sum(self) == sum(other)
+        if isinstance(other, (list, CustomList)):
+            if len(self) != len(other):
+                return False
+            for i, _ in enumerate(self):
+                if self[i] != other[i]:
+                    return False
+            return True
         return NotImplemented
 
     def __ne__(self, other):
-        if isinstance(other, CustomList):
-            return sum(self) != sum(other)
+        if isinstance(other, (list, CustomList)):
+            equal = 0
+            if len(self) == len(other):
+                for i, _ in enumerate(self):
+                    if self[i] == other[i]:
+                        equal += 1
+            return equal != len(self)
         return NotImplemented
 
     def __lt__(self, other):
@@ -73,24 +83,3 @@ class CustomList(list):
 
     def __str__(self):
         return f"{list(self)}, sum: {sum(self)}"
-
-
-a = CustomList([5, 1, 3, 7])
-b = CustomList([1, 2, 7])
-print(a + b)  # [6, 3, 10, 7], sum: 26
-print(a - b)  # [4, -1, -4, 7], sum: 6
-
-c = CustomList([10])
-d = [2, 5]
-print(c + d)  # [12, 5], sum: 17
-print(d + c)  # [12, 5], sum: 17
-
-e = CustomList([2, 5])
-print(e + 10)  # [12, 15], sum: 27
-print(10 + e)  # [12, 15], sum: 27
-print(10 - e)  # [8, 5], sum: 13
-
-print(a == b)  # False (26 != 10)
-print(a > b)   # True (26 > 10)
-print(a < b)   # False
-print(c > a)  # False

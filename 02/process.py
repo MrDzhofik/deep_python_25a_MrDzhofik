@@ -7,14 +7,18 @@ def process_json(
         keys: list[str] | None = None,
         tokens: list[str] | None = None,
         callback: Callable[[str, str], None] | None = None
-        ) -> None:
+        ) -> str:
     dct = json.loads(json_str)
     if keys is None:
         keys = dct.keys()
     if tokens is None:
-        return
+        return ""
 
     tokens_lower = {token.lower() for token in tokens}
+
+    res = ""
+    if callback:
+        res += "Callback: "
 
     for key in keys:
         if key in dct:
@@ -22,10 +26,12 @@ def process_json(
             for word in value:
                 if word.lower() in tokens_lower:
                     if callback:
-                        callback(key, word)
+                        res += f"{callback(key, word)}\n"
                     else:
-                        print(f"key={key}, token={word}")
+                        res += f"key={key}, token={word}\n"
+
+    return res
 
 
-def print_result(key: str, token: str) -> None:
-    print(f"key={key}, token={token}")
+def get_result(key: str, token: str) -> str:
+    return f"key={key}, token={token}"

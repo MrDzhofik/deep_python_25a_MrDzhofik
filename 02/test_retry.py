@@ -1,5 +1,5 @@
 from pytest import CaptureFixture
-from retry import retry_deco, check_str
+from retry import retry_deco
 
 
 def test_decorator_retries():
@@ -27,8 +27,14 @@ def test_decorator_no_retry_on_expected():
 
 
 def test_output_log(capsys: CaptureFixture[str]):
-    check_str(value=None)
+    @retry_deco(3)
+    def check_str(value=None):
+        if value is None:
+            raise ValueError()
+        return isinstance(value, str)
+
     output = capsys.readouterr()
+
     expected_output = (
         'run "check_str" with positional args = (), keyword kwargs = '
         '{\'value\': None}, attempt = 1, exception = ValueError\n'
